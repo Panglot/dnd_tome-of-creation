@@ -1,9 +1,11 @@
 <template>
     <div class="bar">
       <h1>Bar</h1>
-      <button @click="resetStoreCount">Reset</button>
+      <button @click="resetCount">Reset</button>
+      <button @click="incrementAmount--">-</button>
       <input type="text" v-model="incrementAmount"> 
-      <button @click="incrementStoreCount">IncrementStore</button>
+      <button @click="incrementAmount++">+</button>
+      <button @click="incrementStoreCount">IncrementStore by {{incrementAmount}}</button>
       <p><i>Non readable verson </i>{{ count }}</p>
       <p><i>Readable verson </i>{{ countReadable }}</p>
     </div>
@@ -11,29 +13,38 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { store } from './bar.service'
 
 export default {    
   name: 'bar',
+  beforeCreate() {
+    this.$store.registerModule('barService', store);
+    
+  },
   data() {
     return {
       incrementAmount: 1
     }
   },
   computed: {
-    ...mapGetters([
-      'count',
-      'countReadable'
-    ])
+    ...mapGetters({
+      count: 'barService/count',
+      countReadable: 'barService/countReadable'
+    })
   },
   methods: {
     incrementStoreCount() {
-      this.$store.commit('incrementCount', +this.incrementAmount)      
+      this.$store.commit('barService/INCREMENT_COUNT', +this.incrementAmount)      
     },
-    resetStoreCount() {
-      this.$store.commit('resetCount')
+    resetCount() {
+      this.incrementAmount = 1;
+      this.$store.commit('barService/RESET_COUNT')
     }
   },
-  routes: {}
+  routes: {},
+  destroyed() {
+    this.$store.unregisterModule('barService')
+  }
 }
 </script>
 <style> @import './bar.scss'; </style>

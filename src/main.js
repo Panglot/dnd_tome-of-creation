@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Vuex from 'vuex'
 import VueMaterial from 'vue-material';
 import 'vue-material/dist/vue-material.min.css'
+import store from './store'
+import { sync } from 'vuex-router-sync'
 
 import App from './App.vue'
 import Foo from './components/Foo.vue'
@@ -11,7 +12,6 @@ import HelloWorld from './components/HelloWorld.vue'
 
 Vue.use(VueRouter)
 Vue.use(VueMaterial)
-Vue.use(Vuex)
 
 const router = new VueRouter({
   mode: 'history',
@@ -21,23 +21,8 @@ const router = new VueRouter({
   { path: '/bar', component: Bar}]
 })
 
-const store = new Vuex.Store({
-  state: {
-    count: 0
-  },
-  mutations: {
-    incrementCount(state, payload = 0) {
-      state.count += payload;
-    },
-    resetCount(state) {
-      state.count = 0;
-    }
-  },
-  getters: {
-    count(state) { return state.count },
-    countReadable(state, getters) { return `State count: ${getters.count}` }
-  }
-})
+
+sync(store, router);
 
 Vue.config.productionTip = false
 
