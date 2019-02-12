@@ -3,7 +3,12 @@
       <h1>Bar</h1>
       <button @click="resetCount">Reset</button>
       <button @click="incrementAmount--">-</button>
-      <input type="text" v-model="incrementAmount"> 
+      
+      <md-field>
+        <label>Initial Value</label>
+        <md-input v-model="incrementAmount"></md-input>
+      </md-field>
+
       <button @click="incrementAmount++">+</button>
       <button @click="incrementStoreCount">IncrementStore by {{incrementAmount}}</button>
       <p><i>Non readable verson </i>{{ count }}</p>
